@@ -1,3 +1,4 @@
+
 /* ======================================================
    CONFIG
    ====================================================== */
@@ -14,7 +15,7 @@ Papa.parse(CSV_URL, {
   skipEmptyLines: true,
   complete: function(results) {
     sorties = results.data.map(r => sanitizeSortie(r));
-    populateTypeFilter();
+    populateTypeFilter(); // ✅ corrigé
     renderSorties(sorties);
   },
   error: function(err){
@@ -23,11 +24,13 @@ Papa.parse(CSV_URL, {
   }
 });
 
-/* clean keys/values */
+/* ======================================================
+   SANITIZE RECORD
+   ====================================================== */
 function sanitizeSortie(r){
   return {
     Titre: (r["Titre"] || "").trim(),
-    Distance: (r["Distance"] || "").trim(),
+    Distance: (r["Distance de la maison familiale"] || "").trim(),
     Photo: (r["Photo illustration"] || "").trim(),
     Type: (r["Type"] || "").trim(),
     Adresse: (r["Adresse"] || "").trim(),
@@ -42,7 +45,7 @@ function sanitizeSortie(r){
 }
 
 /* ======================================================
-   RENDER
+   RENDER SORTIES CARDS
    ====================================================== */
 function renderSorties(list){
   const area = document.getElementById("displayArea");
@@ -64,15 +67,16 @@ function renderSorties(list){
       ${imgHTML}
       <div class="sortie-content">
         <h2 class="sortie-title">${escapeHtml(r.Titre)}</h2>
-        <p class="sortie-sub">Type :</p> <p>${escapeHtml(r.Type)}</p>
-        <p class="sortie-sub">Distance :</p> <p>${escapeHtml(r.Distance)} km</p>
-        <p class="sortie-sub">Adresse :</p> <p>${escapeHtml(r.Adresse)}</p>
-        <p class="sortie-sub">Animaux :</p> <p>${escapeHtml(r.Animaux)}</p>
-        <p class="sortie-sub">Horaires :</p> <p>${escapeHtml(r.Horaires)}</p>
-        <p class="sortie-sub">Numéro :</p> <p>${escapeHtml(r.Numero)}</p>
-        <p class="sortie-sub">Site :</p> <p><a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>
-        <p class="sortie-sub">Accès PMR :</p> <p>${escapeHtml(r.AccesPMR)}</p>
-        <p class="sortie-sub">Description :</p> <p>${nl2br(escapeHtml(r.Description))}</p>
+
+        <p class="sortie-sub">Type :</p><p>${escapeHtml(r.Type)}</p>
+        <p class="sortie-sub">Distance :</p><p>${escapeHtml(r.Distance)} km</p>
+        <p class="sortie-sub">Adresse :</p><p>${escapeHtml(r.Adresse)}</p>
+        <p class="sortie-sub">Animaux :</p><p>${escapeHtml(r.Animaux)}</p>
+        <p class="sortie-sub">Horaires :</p><p>${escapeHtml(r.Horaires)}</p>
+        <p class="sortie-sub">Numéro :</p><p>${escapeHtml(r.Numero)}</p>
+        <p class="sortie-sub">Site :</p><p><a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>
+        <p class="sortie-sub">Accès PMR :</p><p>${escapeHtml(r.AccesPMR)}</p>
+        <p class="sortie-sub">Description :</p><p>${nl2br(escapeHtml(r.Description))}</p>
 
         <div class="sortie-buttons">
           <button class="btn-print" onclick="printSortie(${idx})">🖨️ Imprimer</button>
@@ -84,11 +88,15 @@ function renderSorties(list){
   });
 }
 
-// Fonctions utilitaires
+/* ======================================================
+   UTILITAIRES
+   ====================================================== */
 function escapeHtml(s){ if(!s) return ""; return s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
 function nl2br(s){ return (s||"").replace(/\r\n|\r|\n/g,"<br>"); }
 
-// Imprimer une sortie
+/* ======================================================
+   PRINT SORTIE
+   ====================================================== */
 function printSortie(idx){
   const r = sorties[idx];
   if(!r) return;
@@ -116,7 +124,9 @@ function printSortie(idx){
   win.document.close();
 }
 
-// WhatsApp share
+/* ======================================================
+   SHARE WHATSAPP
+   ====================================================== */
 function shareWhatsAppSortie(idx){
   const r = sorties[idx];
   if(!r) return;
@@ -124,3 +134,37 @@ function shareWhatsAppSortie(idx){
   const url = `https://wa.me/?text=${text}`;
   window.open(url,'_blank');
 }
+
+/* ======================================================
+   FILTRE PAR TYPE
+   ====================================================== */
+function populateTypeFilter(){
+  const sel = document.getElementById("filterType");
+  if(!sel) return;
+  sel.innerHTML = '<option value="">Filtrer par type</option>';
+  const types = Array.from(new Set(sorties.map(r => r.Type).filter(Boolean))).sort();
+  types.forEach(t=>{
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    sel.appendChild(opt);
+  });
+}
+
+// Événement changement select
+document.getElementById("filterType").addEventListener("change", (e)=>{
+  const val = e.target.value;
+  if(!val) return renderSorties(sorties);
+  renderSorties(sorties.filter(r => r.Type === val));
+});
+
+// Recherche texte
+document.getElementById("quickSearch").addEventListener("input", (e)=>{
+  const q = e.target.value.toLowerCase();
+  const filtered = sorties.filter(r=>{
+    return (r.Titre||"").toLowerCase().includes(q) ||
+           (r.Description||"").toLowerCase().includes(q) ||
+           (r.Type||"").toLowerCase().includes(q);
+  });
+  renderSorties(filtered);
+});
