@@ -1,19 +1,38 @@
-<section>
-  <h2>Sorties 🎉</h2>
-  <div class="container">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorties 🎉 - Maison Familiale</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script defer src="sorties.js"></script>
+</head>
+<body>
+  <!-- AppBar / Header -->
+  <header class="appbar">
+    <div class="appbar-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Logo" class="logo-img">
+        <span class="brand-title">Maison Familiale 🏡</span>
+      </a>
+      <div class="header-actions">
+        <a href="https://docs.google.com/forms/d/TON_FORM_ID/viewform" target="_blank" class="add-recette">➕ Ajouter une sortie</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls: recherche + filtre -->
   <div class="top-controls">
     <input type="text" id="quickSearch" class="searchTop" placeholder="🔍 Rechercher une sortie…">
     <select id="filterType">
       <option value="">Filtrer par type</option>
     </select>
-     <a href="https://docs.google.com/forms/d//e/1FAIpQLSekxsPpZm75WL9lCNEOmh-N223sXVPyxMx7Uj2fioxpJwzrdQ/viewform" target="_blank" class="btn">➕ Ajouter une sortie</a>
   </div>
 
-  <div class="sorties-grid" id="displayArea"></div>
-</div>
-
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="sorties.js"></script>
-</section>
-
-
+  <!-- Container des sorties -->
+  <div class="container">
+    <div class="sorties-grid" id="displayArea"></div>
+  </div>
+</body>
+</html>
