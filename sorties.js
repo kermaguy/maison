@@ -52,7 +52,7 @@ function renderSorties(list){
     return;
   }
 
-  list.forEach((r, idx) => {
+  list.forEach((r, idx)=>{
     const card = document.createElement("article");
     card.className = "sortie-card";
 
@@ -64,56 +64,63 @@ function renderSorties(list){
       ${imgHTML}
       <div class="sortie-content">
         <h2 class="sortie-title">${escapeHtml(r.Titre)}</h2>
-        <p><strong>Type :</strong> ${escapeHtml(r.Type)}</p>
-        <p><strong>Distance :</strong> ${escapeHtml(r.Distance)} km</p>
-        <p><strong>Adresse :</strong> ${escapeHtml(r.Adresse)}</p>
-        <p><strong>Animaux :</strong> ${escapeHtml(r.Animaux)}</p>
-        <p><strong>Horaires :</strong> ${escapeHtml(r.Horaires)}</p>
-        <p><strong>Numéro :</strong> ${escapeHtml(r.Numero)}</p>
-        <p><strong>Site :</strong> <a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>
-        <p><strong>Accès PMR :</strong> ${escapeHtml(r.AccesPMR)}</p>
-        <p>${nl2br(escapeHtml(r.Description))}</p>
+        <p class="sortie-sub">Type :</p> <p>${escapeHtml(r.Type)}</p>
+        <p class="sortie-sub">Distance :</p> <p>${escapeHtml(r.Distance)} km</p>
+        <p class="sortie-sub">Adresse :</p> <p>${escapeHtml(r.Adresse)}</p>
+        <p class="sortie-sub">Animaux :</p> <p>${escapeHtml(r.Animaux)}</p>
+        <p class="sortie-sub">Horaires :</p> <p>${escapeHtml(r.Horaires)}</p>
+        <p class="sortie-sub">Numéro :</p> <p>${escapeHtml(r.Numero)}</p>
+        <p class="sortie-sub">Site :</p> <p><a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>
+        <p class="sortie-sub">Accès PMR :</p> <p>${escapeHtml(r.AccesPMR)}</p>
+        <p class="sortie-sub">Description :</p> <p>${nl2br(escapeHtml(r.Description))}</p>
+
+        <div class="sortie-buttons">
+          <button class="btn-print" onclick="printSortie(${idx})">🖨️ Imprimer</button>
+          <button class="btn-whatsapp" onclick="shareWhatsAppSortie(${idx})">📱 WhatsApp</button>
+        </div>
       </div>
     `;
     area.appendChild(card);
   });
 }
 
-/* ======================================================
-   FILTRE TYPE
-   ====================================================== */
-function populateTypeFilter(){
-  const sel = document.getElementById("filterType");
-  const types = Array.from(new Set(sorties.map(r => r.Type).filter(Boolean))).sort();
-  types.forEach(t => {
-    const opt = document.createElement("option");
-    opt.value = t;
-    opt.textContent = t;
-    sel.appendChild(opt);
-  });
-}
-
-document.getElementById("filterType").addEventListener("change", (e) => {
-  const val = e.target.value;
-  if(!val) return renderSorties(sorties);
-  renderSorties(sorties.filter(r => r.Type === val));
-});
-
-/* ======================================================
-   SEARCH
-   ====================================================== */
-document.getElementById("quickSearch").addEventListener("input", (e) => {
-  const q = e.target.value.toLowerCase();
-  const filtered = sorties.filter(r => {
-    return (r.Titre||"").toLowerCase().includes(q) ||
-           (r.Description||"").toLowerCase().includes(q) ||
-           (r.Type||"").toLowerCase().includes(q);
-  });
-  renderSorties(filtered);
-});
-
-/* ======================================================
-   UTIL
-   ====================================================== */
+// Fonctions utilitaires
 function escapeHtml(s){ if(!s) return ""; return s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
 function nl2br(s){ return (s||"").replace(/\r\n|\r|\n/g,"<br>"); }
+
+// Imprimer une sortie
+function printSortie(idx){
+  const r = sorties[idx];
+  if(!r) return;
+  const win = window.open("", "_blank", "width=800,height=900");
+  const html = `
+    <html>
+      <head>
+        <title>${escapeHtml(r.Titre)}</title>
+        <style>
+          body{ font-family: Georgia, 'Times New Roman', serif; padding:24px; color:#111; }
+          h1{ font-size:24px; margin-bottom:8px; }
+          img{ max-width:100%; height:auto; border-radius:8px; margin-bottom:12px; }
+          h2{ font-size:18px; margin-top:12px; color:#333; }
+          p{ white-space:pre-wrap; }
+        </style>
+      </head>
+      <body>
+        ${ r.Photo ? `<img src="${escapeHtml(r.Photo)}" alt="">` : '' }
+        <h1>${escapeHtml(r.Titre)}</h1>
+        <p>${nl2br(escapeHtml(r.Description))}</p>
+      </body>
+    </html>
+  `;
+  win.document.write(html);
+  win.document.close();
+}
+
+// WhatsApp share
+function shareWhatsAppSortie(idx){
+  const r = sorties[idx];
+  if(!r) return;
+  const text = `Sortie: ${r.Titre}%0AType: ${r.Type}%0ADistance: ${r.Distance} km%0AAdresse: ${r.Adresse}%0AVoir la page: ${encodeURIComponent(window.location.href)}`;
+  const url = `https://wa.me/?text=${text}`;
+  window.open(url,'_blank');
+}
