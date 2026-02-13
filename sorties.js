@@ -63,21 +63,23 @@ function renderSorties(list){
       ? `<img src="${escapeHtml(r.Photo)}" alt="${escapeHtml(r.Titre)}" class="sortie-img" loading="lazy" onerror="this.style.display='none'">`
       : `<div class="no-img">Aucune image</div>`;
 
+    // Création des infos conditionnelles
+    const infos = [];
+    if(r.Type) infos.push(`<p><strong>Type:</strong> ${escapeHtml(r.Type)}</p>`);
+    if(r.Distance) infos.push(`<p><strong>Distance:</strong> ${escapeHtml(r.Distance)} km</p>`);
+    if(r.Adresse) infos.push(`<p><strong>Adresse:</strong> ${escapeHtml(r.Adresse)}</p>`);
+    if(r.Horaires) infos.push(`<p><strong>Horaires:</strong> ${escapeHtml(r.Horaires)}</p>`);
+    if(r.Animaux) infos.push(`<p><strong>Animaux:</strong> ${escapeHtml(r.Animaux)}</p>`);
+    if(r.AccesPMR) infos.push(`<p><strong>Accès PMR:</strong> ${escapeHtml(r.AccesPMR)}</p>`);
+    if(r.Numero) infos.push(`<p><strong>Téléphone:</strong> ${escapeHtml(r.Numero)}</p>`);
+    if(r.Site) infos.push(`<p><strong>Site:</strong> <a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>`);
+    if(r.Description) infos.push(`<p><strong>Description:</strong> ${nl2br(escapeHtml(r.Description))}</p>`);
+
     card.innerHTML = `
       ${imgHTML}
       <div class="sortie-content">
         <h2 class="sortie-title">${escapeHtml(r.Titre)}</h2>
-
-        <p class="sortie-sub">Type :</p><p>${escapeHtml(r.Type)}</p>
-        <p class="sortie-sub">Distance :</p><p>${escapeHtml(r.Distance)} km</p>
-        <p class="sortie-sub">Adresse :</p><p>${escapeHtml(r.Adresse)}</p>
-        <p class="sortie-sub">Animaux :</p><p>${escapeHtml(r.Animaux)}</p>
-        <p class="sortie-sub">Horaires :</p><p>${escapeHtml(r.Horaires)}</p>
-        <p class="sortie-sub">Numéro :</p><p>${escapeHtml(r.Numero)}</p>
-        <p class="sortie-sub">Site :</p><p><a href="${escapeHtml(r.Site)}" target="_blank">${escapeHtml(r.Site)}</a></p>
-        <p class="sortie-sub">Accès PMR :</p><p>${escapeHtml(r.AccesPMR)}</p>
-        <p class="sortie-sub">Description :</p><p>${nl2br(escapeHtml(r.Description))}</p>
-
+        ${infos.join('')}
         <div class="sortie-buttons">
           <button class="btn-print" onclick="printSortie(${idx})">🖨️ Imprimer</button>
           <button class="btn-whatsapp" onclick="shareWhatsAppSortie(${idx})">📱 WhatsApp</button>
