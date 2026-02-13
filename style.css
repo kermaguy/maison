@@ -96,3 +96,103 @@ ul li {
 .link-card:hover {
   transform: scale(1.05);
 }
+/* ============================
+   SORTIES CARDS
+============================= */
+.sorties-grid{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.sortie-card{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  background:var(--card-bg);
+  padding:16px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+/* Image */
+.sortie-img{
+  width:100%;
+  height:auto;
+  border-radius:10px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+
+/* content area */
+.sortie-content{
+  flex:1;
+}
+
+/* title */
+.sortie-title{
+  font-family:"SpicySale", serif;
+  font-size:22px;
+  color:var(--primary-dark);
+  margin:0 0 6px 0;
+}
+
+/* small headings */
+.sortie-sub{
+  font-weight:700;
+  margin-top:8px;
+  margin-bottom:6px;
+  color:var(--primary-dark);
+}
+
+/* buttons row */
+.sortie-buttons{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+}
+
+/* Gradient styled print/whatsapp buttons */
+.btn-print, .btn-whatsapp {
+  padding:8px 12px;
+  border-radius:10px;
+  color:white;
+  border:none;
+  cursor:pointer;
+  background-image: var(--grad);
+  font-weight:700;
+}
+
+/* no-image placeholder */
+.no-img{
+  width:100%;
+  height:160px;
+  border-radius:10px;
+  background:#efefef;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#777;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:900px){
+  .sortie-card{
+    flex-direction:column;
+  }
+  .sortie-img{
+    width:100%;
+    height:auto;
+    max-height:360px;
+  }
+}
+
+@media (min-width:901px){
+  .sortie-img{
+    width:340px; 
+    height:340px;
+    object-fit:cover;
+  }
+}
+
+.sortie-content p{ margin:6px 0; color:#222; }
