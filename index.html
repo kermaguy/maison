@@ -5,59 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maison Familiale 🏡</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
   <script defer src="app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <img src="assets/logo.png" alt="Logo Maison Familiale" class="logo">
+    <img src="assets/logo.png" alt="Logo" class="logo">
     <h1>Maison Familiale 🏡</h1>
   </header>
 
-  <!-- Section Présence -->
-  <section class="presence">
-    <h2>Présence sur place 👋</h2>
-    <button class="btn" onclick="markPresence('serai')">Je serai présent 🕒</button>
-    <button class="btn" onclick="markPresence('present')">Je suis présent ✅</button>
-    <div id="presence-log"></div>
+  <!-- Tableau de bord -->
+  <section class="dashboard">
+    <h2>Tableau de bord 📊</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <h3>Présence 👋</h3>
+        <button class="btn" onclick="markPresence('serai')">Je serai présent 🕒</button>
+        <button class="btn" onclick="markPresence('present')">Je suis présent ✅</button>
+        <div id="presence-log"></div>
+      </div>
+
+      <div class="dash-card">
+        <h3>Poubelles 🗑️</h3>
+        <ul id="reminder-list"></ul>
+      </div>
+
+      <div class="dash-card">
+        <h3>Travaux à faire 🔨</h3>
+        <ul id="tasks-list"></ul>
+      </div>
+    </div>
   </section>
 
-  <!-- Section Rappels -->
-  <section class="reminders">
-    <h2>Rappels 🗑️</h2>
-    <ul id="reminder-list"></ul>
+  <!-- Navigation vers pages annexes -->
+  <section class="links">
+    <h2>Actions rapides 🏃‍♂️</h2>
+    <div class="link-grid">
+      <a href="courses.html" class="link-card">Faire des courses 🛒</a>
+      <a href="sorties.html" class="link-card">Sortir 🎉</a>
+      <a href="jardinage.html" class="link-card">Jardiner 🌳</a>
+      <a href="problemes.html" class="link-card">Un problème ? 🚨</a>
+    </div>
   </section>
-
-  <!-- Section Sorties -->
-  <section class="outings">
-    <h2>Sorties conseillées 🎉</h2>
-    <ul id="outing-list"></ul>
-  </section>
-
-  <!-- Section Travaux -->
-  <section class="tasks">
-    <h2>Travaux & Réparations 🔨</h2>
-    <ul id="tasks-list"></ul>
-  </section>
-
-  <!-- Section Jardinage -->
-  <section class="gardening">
-    <h2>Jardinage 🌳</h2>
-    <ul id="garden-list"></ul>
-  </section>
-
-  <!-- Section Achats -->
-  <section class="shopping">
-    <h2>Trucs à acheter 🛒</h2>
-    <ul id="shopping-list"></ul>
-  </section>
-
-  <!-- Section Infos utiles -->
-  <section class="info">
-    <h2>Infos utiles 🏥🚗</h2>
-    <ul id="info-list"></ul>
-  </section>
-
 </body>
 </html>
